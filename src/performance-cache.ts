@@ -1,7 +1,6 @@
 import { PartialLogEntry, StepType } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import fileWriter from "./helpers/file-writer";
-//import { Capabilities } from '@wdio/types';
 import { StepSuffix } from "./constants/step-suffix";
 import { IdGenerator } from "./helpers/id-generator";
 
@@ -126,9 +125,6 @@ export class PerformanceCache {
         for (const performanceEntry of this._performanceEntries) {
             await fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
         }
-        // this._performanceEntries.forEach(async performanceEntry => {
-        //     await fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
-        // });
 
         this.clearData();
     }

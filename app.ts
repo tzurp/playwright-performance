@@ -1,13 +1,5 @@
-import test from "@playwright/test";
-import {playwrightPerformance, PlaywrightPerformance, PerformanceOptions } from "./src/performance-fixture";
-import { PerformanceMain } from "./src/performance-main";
+import {playwrightPerformance, PlaywrightPerformance, PerformanceOptions, PerformanceWorker } from "./src/performance-fixture";
 
 export {playwrightPerformance};
 
-export type {PlaywrightPerformance, PerformanceOptions};
-
-test.afterAll(async ({})=> {
-    const performance = new PerformanceMain();
-    // TODO: need to pass options
-    await performance.analyzeResults();
-})
+export type {PlaywrightPerformance, PerformanceOptions, PerformanceWorker};

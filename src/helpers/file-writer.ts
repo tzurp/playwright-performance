@@ -12,8 +12,8 @@ class FileWriter {
         try {
             await fs.writeFile(filePath, content);
         }
-        catch (err) {
-            console.log(`Playwright-performance error: writeFile failed: ${err}`);
+        catch (err: any) {
+            console.log(`Playwright-performance error: writeFile failed: ${err}, ${err.stack}`);
         }
     }
 
@@ -32,8 +32,8 @@ class FileWriter {
         try {
             data = await fs.readFile(filePath, "utf-8");
         }
-        catch (err) {
-            console.log(`Playwright-performance error: readFile failed: ${err}`);
+        catch (err: any) {
+            console.log(`Playwright-performance error: readFile failed: ${err}, ${err.stack}`);
         }
 
         const stringArray = data.split("\n");
@@ -48,14 +48,14 @@ class FileWriter {
     public async createResultsDirIfNotExist(resultsPath?: string): Promise<string> {
         let npath = "";
         let isNotLegal = true;
-        
+
         if (resultsPath) {
-        isNotLegal = /[*"\[\]:;|,]/g.test(resultsPath);
-        
-        npath = path.normalize(resultsPath);
+            isNotLegal = /[*"\[\]:;|,]/g.test(resultsPath);
+
+            npath = path.normalize(resultsPath);
         }
-        
-        const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results": npath;
+
+        const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
 
         const root = appRoot.path;
 
@@ -74,24 +74,23 @@ class FileWriter {
 
     private async makeDir(dirPath: string): Promise<void> {
         try {
-            await fs.mkdir(dirPath, {recursive: true});
+            await fs.mkdir(dirPath, { recursive: true });
         }
-        catch (err) {
-            console.log(`Playwright-performance error: can't create dir: ${dirPath}: ${err}`);
+        catch (err: any) {
+            console.log(`Playwright-performance error: can't create dir: ${dirPath}: ${err}, ${err.stack}`);
         }
     }
 
     private async isFileExist(dirPath: string): Promise<boolean> {
         let isExists = false;
+
         try {
             await fs.access(dirPath);
             isExists = true;
         }
-        catch {
-            isExists = false;
+        finally {
+            return isExists;
         }
-
-        return isExists;
     }
 }
 export default new FileWriter();
