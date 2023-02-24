@@ -2,7 +2,8 @@
 
 ![chart](resources/chart.png)
 
-With this plugin for [Playwright](https://playwright.dev/) you can easily add performance analysis to any flow in your tests.
+To ensure that your application is responsive and performing optimally, it is important to monitor the apparent response time of key procedures. Apparent response time is defined as the time it takes for a procedure to complete and make the application available to the user.
+With this [Playwright](https://playwright.dev/) plugin, you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application.
 
 <h2>Installation</h2>
 The easiest way to install this module as a (dev-)dependency is by using the following command:
@@ -61,16 +62,20 @@ it("should test github startup performance", () => {
 ```
 
 <h2>Options</h2>
-You can set the option in the performanceOptions fixture object as follows (default values):
+You can override the default options values in the `performanceOptions` fixture object as follows:
 
 ```
-performanceOptions: [{
+const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>({
+  performance: playwrightPerformance.performance,
+  performanceOptions: [{
     disableAppendToExistingFile: false,
-    performanceResultsDirectory: "performance-results",
     performanceResultsFileName: "performance-results",
     dropResultsFromFailedTest: false,
-    analyzeByBrowser: false
+    performanceResultsDirectory: "performance-results-dir",
+    analyzeByBrowser: false,
   }, { scope: 'worker' }],
+  worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
+});
 ```
 
 <h3>disableAppendToExistingFile</h3>
@@ -85,7 +90,7 @@ A newly created results file normally overwrites the old file. If you want to ke
 
 ```
 ...
-performanceResultsFileName: `performance-results_${new Date().getTime()}`
+performanceResultsFileName: `performance-results_${new Date().getHours()}`
 ...
 ```
 
@@ -109,6 +114,7 @@ Default is `false`. If true, the performance data would be grouped also by the b
 <h2>Getting the results</h2>
 
 A new results directory (the default directory name is `performance-results`) is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv`. The analyzed data includes: average time, standard error of mean(sem), number of samples, min value, max value, earliest time and latest time.
+The results table is also printed to the terminal log.
 
 <h2>Typescript support</h2>
 

@@ -8,8 +8,8 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
     disableAppendToExistingFile: false,
     dropResultsFromFailedTest: false,
     analyzeByBrowser: false,
-    performanceResultsDirectory: "",
-    performanceResultsFileName: ""
+    performanceResultsDirectory: "performance-results-dir",
+    performanceResultsFileName: `performance-results_${new Date().getHours()}`
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });
@@ -28,7 +28,7 @@ for (let i = 0; i < 3; i++) {
     await page.goto('http://github.com/');
     performance.sampleEnd("startup_GH");
 
-    const message = performance.getSampleTime("startup_GH") < performance.getSampleTime("startup_SF") ? "GitHub is faster": "SourceForge is faster";
+    const message = performance.getSampleTime("startup_GH") < performance.getSampleTime("startup_SF") ? "GitHub is faster" : "SourceForge is faster";
 
     console.log(message);
 
