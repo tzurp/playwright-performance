@@ -5,20 +5,18 @@ import { playwrightPerformance } from "../src/performance-fixture";
 const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>({
   performance: playwrightPerformance.performance,
   performanceOptions: [{
-    disableAppendToExistingFile: false,
+    disableAppendToExistingFile: true,
     dropResultsFromFailedTest: false,
-    analyzeByBrowser: false,
-    performanceResultsDirectory: "performance-results-dir",
+    analyzeByBrowser: true,
+    performanceResultsDirectoryName: "performance-results-dir",
     performanceResultsFileName: `performance-results_${new Date().getHours()}`
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });
 
-// TODO: write the config options alternative
-
 for (let i = 0; i < 3; i++) {
   test('startup performance ' + i, async ({ page, performance }) => {
-    await page.goto("http://web.telegram.org/")
+    await page.goto("http://www.microsoft.com");
 
     performance.sampleStart("startup_SF");
     await page.goto('https://sourceforge.net/');

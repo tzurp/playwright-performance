@@ -1,6 +1,6 @@
 import { PartialLogEntry, StepType } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
-import fileWriter from "./helpers/file-writer";
+import { FileWriter } from "./helpers/file-writer";
 import { StepSuffix } from "./constants/step-suffix";
 import { IdGenerator } from "./helpers/id-generator";
 
@@ -123,7 +123,7 @@ export class PerformanceCache {
     private async writePerformanceDataToFile(fileName: string): Promise<void> {
 
         for (const performanceEntry of this._performanceEntries) {
-            await fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
+            await FileWriter.getInstance().appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
         }
 
         this.clearData();

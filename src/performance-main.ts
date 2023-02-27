@@ -1,13 +1,14 @@
 import path from "path";
-import fileWriter from "./helpers/file-writer";
+import { FileWriter } from "./helpers/file-writer";
 import { IdGenerator } from "./helpers/id-generator";
 import { TestInfo } from "@playwright/test";
-import { Options } from "./entities/options";
+import { getOptions, Options, setOptions } from "./entities/options";
 import { PerformanceAnalyzer } from "./performance-analyzer";
 import { PerformanceCache } from "./performance-cache";
 import { variables } from "./constants/variables";
 
 export class PerformanceMain {
+    private _options: Options;
     private _instanceid: string;
     private logFileName = variables.logFileName;
     private performanceCache: PerformanceCache;
@@ -20,11 +21,11 @@ export class PerformanceMain {
         this.performanceCache = new PerformanceCache();
 
         if (options) {
-            (global as any)._performanceResultsFileName = options.performanceResultsFileName || "performance-results";
-            (global as any)._performanceResultsDirectory = options.performanceResultsDirectory || "performance-results";
-            (global as any)._disableAppendToExistingFile = options.disableAppendToExistingFile;
-            (global as any)._dropResultsFromFailedTest = options.dropResultsFromFailedTest;
-            (global as any)._analyzeByBrowser = options.analyzeByBrowser;
+            setOptions(options);
+            this._options = getOptions();
+        }
+        else {
+            this._options = getOptions();
         }
     }
 
@@ -44,15 +45,23 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async initialize(): Promise<void> {
-        const resultsDir = await fileWriter.createResultsDirIfNotExist((global as any)._performanceResultsDirectory);
+        let resultsDir = "";
+        const fileWriter = FileWriter.getInstance();
 
-        (global as any)._resultsDir = resultsDir;
+        if (!(global as any)._playwrightPerformanceResultsDir) {
+            resultsDir = await fileWriter.createResultsDirIfNotExist(this._options.performanceResultsDirectoryName);
+
+            (global as any)._playwrightPerformanceResultsDir = resultsDir;
+        }
+        else {
+            resultsDir = (global as any)._playwrightPerformanceResultsDir;
+        }
 
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString(), "instanceID": this._instanceid });
 
         const fileName = path.join(resultsDir, this.logFileName);
 
-        if ((global as any)._disableAppendToExistingFile) {
+        if (this._options.disableAppendToExistingFile) {
             await fileWriter.writeToFile(fileName, `${initObj}\n`);
         }
         else {
@@ -64,20 +73,17 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async finalizeTest(browser: any, workerInfo: TestInfo): Promise<void> {
-        await this.performanceCache.flush(fileWriter.getFilePath((global as any)._resultsDir, variables.logFileName), browser, workerInfo.status == 'passed');
+        await this.performanceCache.flush(FileWriter.getInstance().getFilePath((global as any)._playwrightPerformanceResultsDir, variables.logFileName), browser, workerInfo.status == 'passed');
     }
 
     /**
      * @deprecated Don't use this method directly.
      */
     async analyzeResults(): Promise<void> {
-        const performanceResultsFileName = (global as any)._performanceResultsFileName || "performance-results";
-        const dropResultsFromFailedTest = (global as any)._dropResultsFromFailedTest;
-        const analyzeByBrowser = (global as any)._analyzeByBrowser;
-        const resultsDir = (global as any)._resultsDir
-
+        const fileWriter = FileWriter.getInstance();
+        const resultsDir = (global as any)._playwrightPerformanceResultsDir;
         const analyzer = new PerformanceAnalyzer();
 
-        await analyzer.analyze(fileWriter.getFilePath(resultsDir, this.logFileName), fileWriter.getFilePath(resultsDir, performanceResultsFileName), dropResultsFromFailedTest, analyzeByBrowser);
+        await analyzer.analyze(fileWriter.getFilePath(resultsDir, this.logFileName), fileWriter.getFilePath(resultsDir, this._options.performanceResultsFileName as string), this._options.dropResultsFromFailedTest, this._options.analyzeByBrowser);
     }
 }
