@@ -1,6 +1,6 @@
 {
   "name": "playwright-performance",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Playwright plugin for analyzing test flow performance",
   "files": [
     "/build/src",
@@ -8,7 +8,9 @@
     "/resources"
   ],
   "main": "build/app.js",
-  "scripts": {"test": "npx playwright test"},
+  "scripts": {
+    "test": "npx playwright test"
+  },
   "keywords": [
     "playwright-plugin",
     "performance"
