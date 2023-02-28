@@ -5,9 +5,9 @@ import { playwrightPerformance } from "../src/performance-fixture";
 const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>({
   performance: playwrightPerformance.performance,
   performanceOptions: [{
-    disableAppendToExistingFile: true,
+    disableAppendToExistingFile: false,
     dropResultsFromFailedTest: false,
-    analyzeByBrowser: true,
+    analyzeByBrowser: false,
     performanceResultsDirectoryName: "performance-results-dir",
     performanceResultsFileName: `performance-results_${new Date().getHours()}`
   }, { scope: 'worker' }],

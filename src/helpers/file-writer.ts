@@ -20,11 +20,13 @@ export class FileWriter {
   public async readAllLines(path: string): Promise<Array<string>> {
     await this.lock;
     let data = "";
+    
     try {
       this.lock = this.lockFile();
+
       data = await fs.readFile(path, "utf-8");
-    } catch (error) {
-      console.error(`An error occurred while reading file ${path}:`, error);
+    } catch (err) {
+      console.error(`An error occurred while reading file ${path}:`, err);
     } finally {
       await this.unlockFile();
     }
@@ -36,11 +38,13 @@ export class FileWriter {
 
   public async writeToFile(path: string, data: string): Promise<void> {
     await this.lock;
+    
     try {
       this.lock = this.lockFile();
+      
       await fs.writeFile(path, data);
-    } catch (error) {
-      console.error(`An error occurred while writing file ${path}:`, error);
+    } catch (err) {
+      console.error(`An error occurred while writing file ${path}:`, err);
     } finally {
       await this.unlockFile();
     }
@@ -50,9 +54,10 @@ export class FileWriter {
     await this.lock;
     try {
       this.lock = this.lockFile();
+
       await fs.appendFile(path, data);
-    } catch (error) {
-      console.error(`An error occurred while appending file ${path}:`, error);
+    } catch (err) {
+      console.error(`An error occurred while appending file ${path}:`, err);
     } finally {
       await this.unlockFile();
     }
@@ -75,7 +80,7 @@ export class FileWriter {
 
     const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
 
-    if (!root) { console.log("Performance-Total error: Can't get root folder"); return "" }
+    if (!root) { console.error("Performance-Total error: Can't get root folder"); return "" }
 
     const dirPath = path.join(root, resultsDir);
 
@@ -92,13 +97,14 @@ export class FileWriter {
     try {
       await fs.mkdir(dirPath, { recursive: true });
     }
-    catch (err: any) {
-      console.log(`Performance-Total error: can't create dir: ${dirPath}: ${err}, ${err.stack}`);
+    catch (err) {
+      console.error(`Performance-Total error: can't create dir: ${dirPath}:`, err);
     }
   }
 
   private async isFileExist(dirPath: string): Promise<boolean> {
     let isExists = false;
+
     try {
       await fs.access(dirPath);
       isExists = true;
@@ -110,6 +116,7 @@ export class FileWriter {
 
   private async lockFile(): Promise<void> {
     await this.lock;
+    
     this.lock = new Promise<void>((resolve: () => void) => {
       setImmediate(resolve);
     });

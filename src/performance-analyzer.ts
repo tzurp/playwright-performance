@@ -4,6 +4,8 @@ import calculator from "./helpers/calculator";
 import { FileWriter } from "./helpers/file-writer";
 import helperMethods from "./helpers/group";
 import ObjectsToCsv from 'objects-to-csv';
+import { variables } from "./constants/variables";
+import { Options } from "./entities/options";
 
 export class PerformanceAnalyzer {
     _performanceResults: Array<PerformanceResult>;
@@ -12,11 +14,16 @@ export class PerformanceAnalyzer {
         this._performanceResults = new Array<PerformanceResult>();
     }
 
-    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined, analyzeByBrowser: boolean | undefined): Promise<void> {
-        let performanceLogEntries = await this.deserializeData(logFileName);
+    async analyze(options: Options, workerIndex: number): Promise<void> {
+        const fileWriter = FileWriter.getInstance();
+        const resultsDir = (global as any)._playwrightPerformanceResultsDir;
+        const logFilePath = fileWriter.getFilePath(resultsDir, variables.logFileName);
+        const saveDataFilePath = fileWriter.getFilePath(resultsDir, options.performanceResultsFileName as string);
+
+        let performanceLogEntries = await this.deserializeData(logFilePath);
         let groupedResults: PerformanceLogEntry[][];
 
-        if (dropResultsFromFailedTest) {
+        if (options.dropResultsFromFailedTest) {
             const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
 
             performanceLogEntries = entriesWithTestPass;
@@ -26,7 +33,7 @@ export class PerformanceAnalyzer {
             return;
         }
 
-        groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
+        groupedResults = !options.analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
 
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);
@@ -35,7 +42,7 @@ export class PerformanceAnalyzer {
             const avgAndSte = calculator.getAverageAndStandardDeviation(durationList);
 
             performanceResult.name = group[0].name;
-            performanceResult.brName = analyzeByBrowser ? group[0].brName : "general";
+            performanceResult.brName = options.analyzeByBrowser ? group[0].brName : "general";
             performanceResult.earliestTime = group[0].startDisplayTime;
             performanceResult.latestTime = group[group.length - 1].startDisplayTime;
             performanceResult.avgTime = avgAndSte[0];
@@ -49,7 +56,7 @@ export class PerformanceAnalyzer {
 
         const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
 
-        console.log("\nPlaywright-performance results:\n");
+        console.log(`\nPlaywright-performance results(worker[${workerIndex}]):\n`);
 
         console.table(picked);
 

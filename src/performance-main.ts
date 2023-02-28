@@ -79,11 +79,11 @@ export class PerformanceMain {
     /**
      * @deprecated Don't use this method directly.
      */
-    async analyzeResults(): Promise<void> {
+    async analyzeResults(workerIndex: number): Promise<void> {
         const fileWriter = FileWriter.getInstance();
-        const resultsDir = (global as any)._playwrightPerformanceResultsDir;
+        
         const analyzer = new PerformanceAnalyzer();
 
-        await analyzer.analyze(fileWriter.getFilePath(resultsDir, this.logFileName), fileWriter.getFilePath(resultsDir, this._options.performanceResultsFileName as string), this._options.dropResultsFromFailedTest, this._options.analyzeByBrowser);
+        await analyzer.analyze({performanceResultsFileName: this._options.performanceResultsFileName, dropResultsFromFailedTest: this._options.dropResultsFromFailedTest, analyzeByBrowser: this._options.analyzeByBrowser}, workerIndex);
     }
 }
