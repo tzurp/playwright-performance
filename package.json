@@ -4,7 +4,8 @@
   "description": "Playwright plugin for analyzing test flow performance",
   "files": [
     "/build/src",
-    "/build/app.d.ts"
+    "/build/app.d.ts",
+    "/resources"
   ],
   "main": "build/app.js",
   "scripts": {"test": "npx playwright test"},
