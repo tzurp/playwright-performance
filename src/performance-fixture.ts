@@ -1,23 +1,23 @@
-import { TestInfo } from "@playwright/test";
+import { TestInfo, WorkerInfo } from "@playwright/test";
 import { Options } from "./entities/options";
 import {PerformanceMain} from "./performance-main";
 
 const _playwrightPerformance = {
-    performance: async({browserName}: any, use: (arg0: PerformanceMain) => any, workerInfo: TestInfo) => {
+    performance: async({browserName}: any, use: (arg0: PerformanceMain) => any, testInfo: TestInfo) => {
         const performance = new PerformanceMain();
 
         await use(performance);
 
-        await performance.finalizeTest(browserName, workerInfo);
+        await performance.finalizeTest(browserName, testInfo);
     },
-    worker: async ({ performanceOptions }: any, use:any) => {
+    worker: async ({ performanceOptions }: any, use:any, workerInfo: WorkerInfo) => {
         const performance = new PerformanceMain(performanceOptions as Options);
         
         await performance.initialize();
         
         await use();
-        
-        await performance.analyzeResults();
+
+        await performance.analyzeResults(workerInfo.workerIndex);
       }
 }
 

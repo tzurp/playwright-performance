@@ -6,7 +6,7 @@ To ensure that your application is responsive and performing optimally, it is im
 With this [Playwright](https://playwright.dev/) plugin, you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application.
 
 <h2>Installation</h2>
-The easiest way to install this module as a (dev-)dependency is by using the following command:
+You can install this module as a dev-dependency using the following command:
 
 ```
 npm install playwright-performance --save-dev
@@ -38,23 +38,22 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
 });
 
 test('startup performance', async ({ page, performance }) => {
-    performance.sampleStart("startup");
-
+    performance.sampleStart("GH-startup");
     await page.goto('http://github.com/');
+    performance.sampleEnd("GH-startup");
 
-    performance.sampleEnd("startup");
+    performance.sampleStart("SF-startup");
+    await page.goto('https://sourceforge.net/');
+    performance.sampleEnd("SF-startup");
   });
 ```
 
-It is possible to get the time span for a single sample inside a test:
+You can also get the time span for a single sample inside a test:
 
 ```
 it("should test github startup performance", () => {
-            // ...
             performance.sampleStart("Startup");
-            
             browser.url("https://github.com/");
-            
             performance.sampleEnd("Startup");
 
             expect(performance.getSampleTime("Startup")).to.be.at.most(1000);         
@@ -80,7 +79,7 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
 
 <h3>disableAppendToExistingFile</h3>
 
-When set to `true`, tests from new worker will overwrite any existing performance data.
+When set to `true`, new test runs will start fresh and overwrite any existing performance data.
 When set to `false` (default), performance data will be added to the existing data.
 
 <h3>performanceResultsFileName</h3>
@@ -113,8 +112,7 @@ Default is `false`. If true, the performance data would be grouped also by the b
 
 <h2>Getting the results</h2>
 
-A new results directory (the default directory name is `performance-results`) is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv`. The analyzed data includes: average time, standard error of mean(sem), number of samples, min value, max value, earliest time and latest time.
-The results table is also printed to the terminal log.
+A new directory named `performance-results` (or a different specified name) is created inside your project's root folder. Once all the tests are completed, two files are created inside the performance-results directory: `performance-results.json` and `performance-results.csv`. The analyzed data includes average time, standard error of mean (SEM), number of samples, minimum value, maximum value, earliest time, and latest time. The results table is also printed to the terminal log.
 
 <h2>Typescript support</h2>
 
