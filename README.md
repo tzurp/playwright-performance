@@ -3,9 +3,10 @@
 ![chart](resources/chart.png)
 
 To ensure that your application is responsive and performing optimally, it is important to monitor the apparent response time of key procedures. Apparent response time is defined as the time it takes for a procedure to complete and make the application available to the user.
-With this [Playwright](https://playwright.dev/) plugin, you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application.
+With this [Playwright](https://playwright.dev/) plugin, you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application. Read more [here](https://www.linkedin.com/pulse/elevating-your-playwright-tests-plugin-tzur-paldi-phd).
 
 <h2>Installation</h2>
+
 You can install this module as a dev-dependency using the following command:
 
 ```
@@ -48,6 +49,8 @@ test('startup performance', async ({ page, performance }) => {
   });
 ```
 
+* It is advisable to define the extended `test` object in a separate, reusable `test-base` file.
+
 You can also get the time span for a single sample inside a test:
 
 ```
@@ -61,6 +64,7 @@ it("should test github startup performance", () => {
 ```
 
 <h2>Options</h2>
+
 You can override the default options values in the `performanceOptions` fixture object as follows:
 
 ```
@@ -108,6 +112,7 @@ performanceResultsFileName: "results-dir/performance-total-results"
 ```
 
 <h3>analyzeByBrowser</h3>
+
 Default is `false`. If true, the performance data would be grouped also by the browser type.
 
 <h2>Getting the results</h2>
@@ -117,3 +122,7 @@ A new directory named `performance-results` (or a different specified name) is c
 <h2>Typescript support</h2>
 
 Typescript is supported for this plugin.
+
+<h2>Support</h2>
+
+For any questions or suggestions contact me at: [tzur.paldi@outlook.com](mailto:tzur.paldi@outlook.com?subjet=Playwright-cleanup%20Support)
