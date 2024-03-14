@@ -80,8 +80,6 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async analyzeResults(workerIndex: number): Promise<void> {
-        const fileWriter = FileWriter.getInstance();
-        
         const analyzer = new PerformanceAnalyzer();
 
         await analyzer.analyze({performanceResultsFileName: this._options.performanceResultsFileName, dropResultsFromFailedTest: this._options.dropResultsFromFailedTest, analyzeByBrowser: this._options.analyzeByBrowser}, workerIndex);

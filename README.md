@@ -27,7 +27,7 @@ import { playwrightPerformance } from "playwright-performance";
 To use playwright-performance, simply import the playwright-performance object and types, and then extend your test object using test.extend<>(). This will include the performance functionality in your test. No further setup is required. Here's an example:
 
 ```
-import base from '@playwright/test';
+import {test as base} from '@playwright/test';
 import type { PerformanceOptions, PlaywrightPerformance, PerformanceWorker } from "playwright-performance";
 import { playwrightPerformance } from "playwright-performance";
 
