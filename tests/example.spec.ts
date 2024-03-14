@@ -1,4 +1,4 @@
-import base, { expect } from '@playwright/test';
+import {test as base, expect } from '@playwright/test';
 import type { PerformanceOptions, PlaywrightPerformance, PerformanceWorker } from "../src/performance-fixture";
 import { playwrightPerformance } from "../src/performance-fixture";
 
