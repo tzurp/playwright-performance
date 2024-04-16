@@ -9,7 +9,8 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
     dropResultsFromFailedTest: false,
     analyzeByBrowser: false,
     performanceResultsDirectoryName: "performance-results-dir",
-    performanceResultsFileName: `performance-results_${new Date().getHours()}`
+    performanceResultsFileName: `performance-results_${new Date().getHours()}`,
+    suppressConsoleResults: false,
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });

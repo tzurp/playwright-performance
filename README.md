@@ -76,6 +76,7 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
     dropResultsFromFailedTest: false,
     performanceResultsDirectory: "performance-results-dir",
     analyzeByBrowser: false,
+    suppressConsoleResults: false,
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });
@@ -114,6 +115,10 @@ performanceResultsFileName: "results-dir/performance-total-results"
 <h3>analyzeByBrowser</h3>
 
 Default is `false`. If true, the performance data would be grouped also by the browser type.
+
+<h3>suppressConsoleResults</h3>
+
+Default is `false`. If true, the performance results won't be printed to the terminal log.
 
 <h2>Getting the results</h2>
 

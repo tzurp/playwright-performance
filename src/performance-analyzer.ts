@@ -56,9 +56,11 @@ export class PerformanceAnalyzer {
 
         const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
 
+        if(!options.suppressConsoleResults) {
         console.log(`\nPlaywright-performance results(worker[${workerIndex}]):\n`);
 
         console.table(picked);
+        }
 
         await this.serializeData(saveDataFilePath);
 
