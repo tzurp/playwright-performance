@@ -7,7 +7,7 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
   performanceOptions: [{
     disableAppendToExistingFile: false,
     dropResultsFromFailedTest: false,
-    analyzeByBrowser: true,
+    analyzeByBrowser: false,
     performanceResultsDirectoryName: "performance-results-dir",
     performanceResultsFileName: `performance-results_${new Date().getHours()}`,
     suppressConsoleResults: false,
