@@ -4,6 +4,7 @@ export interface Options {
     analyzeByBrowser?: boolean;
     performanceResultsDirectoryName?: string;
     performanceResultsFileName?: string;
+    suppressConsoleResults? : boolean;
 }
 
 const defaultOptions: Options = {
@@ -12,6 +13,7 @@ const defaultOptions: Options = {
     analyzeByBrowser: false,
     performanceResultsDirectoryName: "performance-results",
     performanceResultsFileName: "performance-results",
+    suppressConsoleResults: false,
 };
 
 let currentOptions: Options = { ...defaultOptions };
