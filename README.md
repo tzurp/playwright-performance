@@ -77,6 +77,7 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
     performanceResultsDirectory: "performance-results-dir",
     analyzeByBrowser: false,
     suppressConsoleResults: false,
+    recentDays:0,
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });
@@ -119,6 +120,10 @@ Default is `false`. If true, the performance data would be grouped also by the b
 <h3>suppressConsoleResults</h3>
 
 Default is `false`. If true, the performance results won't be printed to the terminal log.
+
+<h3>recentDays</h3>
+
+Default is `0` feature is off. For any value greater than zero, only the result from the recent designated days would be analyzed. This value can be integer or decimal (e.g. 1 for recent 1 day, 0.5 for recent half day etc.). Please note that the option <b>disableAppendToExistingFile</b> must be set to `false` (default value) in order to use this option.
 
 <h2>Getting the results</h2>
 

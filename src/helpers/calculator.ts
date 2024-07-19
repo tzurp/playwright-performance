@@ -1,4 +1,12 @@
 class Calculator {
+    daysBetweenDates(latestTime: number, earlierTime: number) {
+        const millisecondsPerDay = 24 * 60 * 60 * 1000;
+        
+        const diffInMilliseconds = Math.abs(latestTime - earlierTime);
+
+        return (diffInMilliseconds / millisecondsPerDay);
+    }
+
     getAverageAndStandardDeviation(durationList: Array<number>): [number, number]
     {
         const mean = this.getAverageTimeSpan(durationList);

@@ -6,6 +6,7 @@ import helperMethods from "./helpers/group";
 import ObjectsToCsv from 'objects-to-csv';
 import { variables } from "./constants/variables";
 import { Options } from "./entities/options";
+import Logger from "./helpers/logger";
 
 export class PerformanceAnalyzer {
     _performanceResults: Array<PerformanceResult>;
@@ -15,6 +16,8 @@ export class PerformanceAnalyzer {
     }
 
     async analyze(options: Options, workerIndex: number): Promise<void> {
+        const logger = new Logger(options.suppressConsoleResults as boolean);
+        let recentDaysMessage = '';
         const fileWriter = FileWriter.getInstance();
         const resultsDir = (global as any)._playwrightPerformanceResultsDir;
         const logFilePath = fileWriter.getFilePath(resultsDir, variables.logFileName);
@@ -22,6 +25,15 @@ export class PerformanceAnalyzer {
 
         let performanceLogEntries = await this.deserializeData(logFilePath);
         let groupedResults: PerformanceLogEntry[][];
+
+        if(options.recentDays) {
+            recentDaysMessage = `[Recent days:${options.recentDays}]`;
+            const currentTime = new Date().getTime();
+
+            const entriesWithRecentDays = performanceLogEntries.filter((r) => calculator.daysBetweenDates(currentTime, r.startTime) <= (options.recentDays as number));
+            
+            performanceLogEntries = entriesWithRecentDays;
+        }
 
         if (options.dropResultsFromFailedTest) {
             const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
@@ -55,16 +67,14 @@ export class PerformanceAnalyzer {
         });
 
         const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
+        
+        logger.info(`\nPlaywright-performance results${recentDaysMessage}(worker[${workerIndex}]):\n`, false);
 
-        if(!options.suppressConsoleResults) {
-        console.log(`\nPlaywright-performance results(worker[${workerIndex}]):\n`);
-
-        console.table(picked);
-        }
-
+        logger.info(picked, false, true);
+        
         await this.serializeData(saveDataFilePath);
-
-        console.log(`\nPlaywright-performance results saved to: ${saveDataFilePath}.csv/json\n`);
+        
+        logger.info(`\nPlaywright-performance results saved to: ${saveDataFilePath}.csv/json\n`, true);
     }
 
     private async serializeData(saveDataFilePath: string) {
