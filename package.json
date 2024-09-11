@@ -1,6 +1,6 @@
 {
   "name": "playwright-performance",
-  "version": "1.0.3-0",
+  "version": "1.0.3",
   "description": "Playwright plugin for analyzing test flow performance",
   "files": [
     "/build/src",
