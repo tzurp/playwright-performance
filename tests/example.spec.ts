@@ -11,6 +11,7 @@ const test = base.extend<PlaywrightPerformance, PerformanceOptions & Performance
     performanceResultsDirectoryName: "performance-results-dir",
     performanceResultsFileName: `performance-results_${new Date().getHours()}`,
     suppressConsoleResults: false,
+    recentDays:0,
   }, { scope: 'worker' }],
   worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
 });
