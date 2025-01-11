@@ -7,10 +7,16 @@ export default class Logger {
 
     info(message: string | object, isMandatory: boolean, isTable = false) {
         if (!this._suppressConsoleResults || isMandatory) {
-            if(!isTable)
+            if (!isTable)
                 console.log(message);
             else
                 console.table(message);
+        }
+    }
+
+    error(message: string | object, isMandatory: boolean) {
+        if (!this._suppressConsoleResults || isMandatory) {
+            console.error(`Playwright-Performance error: ${message}`);
         }
     }
 }
