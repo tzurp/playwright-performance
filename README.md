@@ -18,8 +18,7 @@ npm install playwright-performance --save-dev
 Import playwright-peformance in your test file as follows:
 
 ```typescript
-import type { PerformanceOptions, PlaywrightPerformance, PerformanceWorker } from "playwright-performance";
-import { playwrightPerformance } from "playwright-performance";
+import extendPlaywrightPerformance, {PerformanceOptions, PerformanceWorker, PlaywrightPerformance} from "playwright-performance"; 
 ```
 
 ## Usage in test
@@ -27,16 +26,10 @@ import { playwrightPerformance } from "playwright-performance";
 To use playwright-performance, simply import the playwright-performance object and types, and then extend your test object using test.extend<>(). This will include the performance functionality in your test. No further setup is required. Here's an example:
 
 ```typescript
-import {test as base} from '@playwright/test';
-import type { PerformanceOptions, PlaywrightPerformance, PerformanceWorker } from "playwright-performance";
-import { playwrightPerformance } from "playwright-performance";
+import { test as base, expect } from '@playwright/test';
+import extendPlaywrightPerformance, {PerformanceOptions, PerformanceWorker, PlaywrightPerformance} from "playwright-performance"; 
 
-const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>({
-  performance: playwrightPerformance.performance,
-  performanceOptions: [{
-  }, { scope: 'worker' }],
-  worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
-});
+const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance());
 
 test('startup performance', async ({ page, performance }) => {
     performance.sampleStart("GH-startup");
@@ -49,7 +42,9 @@ test('startup performance', async ({ page, performance }) => {
   });
 ```
 
-❗It is advisable to define the extended `test` object in a separate, reusable `test-base` file.
+> ❗
+>
+>👍It is advisable to define the extended `test` object in a separate, reusable `test-base` file👍
 
 You can also get the time span for a single sample inside a test:
 
@@ -68,19 +63,18 @@ it("should test github startup performance", () => {
 You can override the default options values in the `performanceOptions` fixture object as follows:
 
 ```typescript
-const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>({
-  performance: playwrightPerformance.performance,
-  performanceOptions: [{
-    disableAppendToExistingFile: false,
-    performanceResultsFileName: "performance-results",
-    dropResultsFromFailedTest: false,
-    performanceResultsDirectory: "performance-results-dir",
-    analyzeByBrowser: false,
-    suppressConsoleResults: false,
-    recentDays:0,
-  }, { scope: 'worker' }],
-  worker: [playwrightPerformance.worker, { scope: 'worker', auto: true }]
-});
+const options: PerformanceOptions = {
+  // Specify only the options you need. Unspecified options will use default values.
+  disableAppendToExistingFile: false,  // Optional: Default is false
+  dropResultsFromFailedTest: false,    // Optional: Default is false
+  analyzeByBrowser: false,             // Optional: Default is false
+  performanceResultsDirectoryName: "performance-results", // Optional: Default is "performance-results"
+  performanceResultsFileName: "performance-results",      // Optional: Default is "performance-results"
+  suppressConsoleResults: false,       // Optional: Default is false
+  recentDays: 0,                       // Optional: Default is 0
+};
+
+const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance(options));
 ```
 
 ### disableAppendToExistingFile
