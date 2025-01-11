@@ -13,6 +13,16 @@ You can install this module as a dev-dependency using the following command:
 npm install playwright-performance --save-dev
 ```
 
+## Major Update: Version 2.x.x
+
+### ❗❗❗Breaking Changes❗❗❗
+
+This release includes significant changes that may affect your existing implementations. Please read the following instructions carefully to ensure a smooth transition.
+
+### Import and Extending Playwright Test
+
+We have simplified the way you import and extend the Playwright `test` in this version. Make sure to follow these new instructions to properly set up your tests.
+
 ## Usage
 
 Import playwright-peformance in your test file as follows:
