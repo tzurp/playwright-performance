@@ -24,5 +24,5 @@ const _playwrightPerformance = {
 export const playwrightPerformance = _playwrightPerformance;
 export type PlaywrightPerformance = {performance: PerformanceMain};
 export type PerformanceWorker = {worker: PerformanceMain};
-export type PerformanceOptions = {performanceOptions: Options };
+export type PerformanceOptions = Options;
 

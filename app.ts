@@ -1,5 +1,5 @@
-import {playwrightPerformance, PlaywrightPerformance, PerformanceOptions, PerformanceWorker } from "./src/performance-fixture";
+import extendPlaywrightPerformance from './src/extend-playwright-performance';
+import { PerformanceOptions, PerformanceWorker, PlaywrightPerformance } from './src/performance-fixture';
 
-export {playwrightPerformance};
-
-export type {PlaywrightPerformance, PerformanceOptions, PerformanceWorker};
+export default extendPlaywrightPerformance;
+export type {PerformanceOptions, PlaywrightPerformance, PerformanceWorker};

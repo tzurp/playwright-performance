@@ -1,6 +1,6 @@
 {
   "name": "playwright-performance",
-  "version": "1.0.3",
+  "version": "2.0.2",
   "description": "Playwright plugin for analyzing test flow performance",
   "files": [
     "/build/src",
@@ -18,7 +18,7 @@
   "author": "Tzur Paldi",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.45.2",
+    "@playwright/test": "^1.49.1",
     "@types/node": "^20.11.27",
     "@types/objects-to-csv": "^1.3.1"
   },
