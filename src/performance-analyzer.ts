@@ -28,17 +28,21 @@ export class PerformanceAnalyzer {
 
         if(options.recentDays) {
             recentDaysMessage = `[Recent days:${options.recentDays}]`;
-            const currentTime = new Date().getTime();
-
-            const entriesWithRecentDays = performanceLogEntries.filter((r) => calculator.daysBetweenDates(currentTime, r.startTime) <= (options.recentDays as number));
-            
-            performanceLogEntries = entriesWithRecentDays;
         }
 
-        if (options.dropResultsFromFailedTest) {
-            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
-
-            performanceLogEntries = entriesWithTestPass;
+        if (options.dropResultsFromFailedTest || options.recentDays) {
+            const cutoffDate = Date.now() - ((options.recentDays || 0) * 24 * 60 * 60 * 1000);
+            const filteredEntries = performanceLogEntries.filter((e) => {
+                if (options.recentDays && e.startTime < cutoffDate) {
+                    return false;
+                }
+                if (options.dropResultsFromFailedTest) {
+                    return e.isTestPassed;
+                }
+                
+                return true;
+            });
+            performanceLogEntries = filteredEntries;
         }
 
         if (!performanceLogEntries || performanceLogEntries.length == 0) {
