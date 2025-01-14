@@ -20,7 +20,7 @@ const defaultOptions: Options = {
 
 let currentOptions: Options = { ...defaultOptions };
 
-export function setOptions(options: Partial<Options>): void {
+export function setOptions(options: Options): void {
     currentOptions = { ...currentOptions, ...options };
 }
 
