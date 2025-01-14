@@ -1,6 +1,6 @@
 import { PerformanceOptions, playwrightPerformance } from './performance-fixture';
 
-function extendPlaywrightPerformance(customOptions: Partial<PerformanceOptions> = {}): any {
+function extendPlaywrightPerformance(customOptions: PerformanceOptions = {}): any {
     return {
         performance: playwrightPerformance.performance,
         performanceOptions: [customOptions, { scope: 'worker' }],
