@@ -9,29 +9,29 @@ With this [Playwright](https://playwright.dev/) plugin, you can easily add perfo
 
 You can install this module as a dev-dependency using the following command:
 
-```
+```bash
 npm install playwright-performance --save-dev
 ```
 
-## Major Update: Version 2.x.x
+## Major update: Version 2.x.x
 
-### ❗❗❗Breaking Changes❗❗❗
-
-This release includes significant changes that may affect your existing implementations. Please read the following instructions carefully to ensure a smooth transition.
-
-### Import and Extending Playwright Test
-
-We have simplified the way you import and extend the Playwright `test` in this version. Make sure to follow these new instructions to properly set up your tests.
+>### ❗❗❗Breaking Changes❗❗❗
+>
+>This release includes significant changes that may affect your existing implementations. Please read the following instructions carefully to ensure a smooth transition.
+>
+>### Import and extending Playwright test
+>
+>We have simplified the way you import and extend the Playwright `test` in this version. Make sure to follow these new instructions to properly set up your tests.
 
 ## Usage
 
-Import playwright-peformance in your test file as follows:
+Import playwright-performance in your test file as follows:
 
 ```typescript
 import extendPlaywrightPerformance, {PerformanceOptions, PerformanceWorker, PlaywrightPerformance} from "playwright-performance"; 
 ```
 
-## Usage in test
+### Usage in test
 
 To use playwright-performance, simply import the playwright-performance object and types, and then extend your test object using test.extend<>(). This will include the performance functionality in your test. No further setup is required. Here's an example:
 
@@ -52,9 +52,9 @@ test('startup performance', async ({ page, performance }) => {
   });
 ```
 
-> ❗
->
->👍It is advisable to define the extended `test` object in a separate, reusable `test-base` file👍
+>❗
+>It is advisable to define the extended `test` object in a separate, reusable `test-base` file
+>👍
 
 You can also get the time span for a single sample inside a test:
 
@@ -68,7 +68,7 @@ it("should test github startup performance", () => {
         });
 ```
 
-## Options
+### Options
 
 You can override the default options values in the `performanceOptions` fixture object as follows:
 
@@ -87,7 +87,7 @@ const options: PerformanceOptions = {
 const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance(options));
 ```
 
-### disableAppendToExistingFile
+#### __disableAppendToExistingFile__
 
 When set to `false` (default), performance data will be added to the existing data.
 
@@ -97,7 +97,7 @@ When set to `true`, new test runs will start fresh and overwrite any existing pe
 >
 > This action will delete all your performance data permanently. Ensure that you have a backup before proceeding.
 
-### performanceResultsFileName
+#### __performanceResultsFileName__
 
 You can set the default results file name (`performance-results`).
 A newly created results file normally overwrites the old file. If you want to keep old files, it is recommended to add a timestamp to the file name. For example:
@@ -108,11 +108,11 @@ performanceResultsFileName: `performance-results_${new Date().getHours()}`
 ...
 ```
 
-### dropResultsFromFailedTest
+#### __dropResultsFromFailedTest__
 
 Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
 
-### performanceResultsDirectory
+#### __performanceResultsDirectory__
 
 You can override the default path for the results directory in the project's root dir.
 For example:
@@ -123,15 +123,15 @@ performanceResultsFileName: "results-dir/performance-total-results"
 ...
 ```
 
-### analyzeByBrowser
+#### __analyzeByBrowser__
 
 Default is `false`. If true, the performance data would be grouped also by the browser type.
 
-### suppressConsoleResults
+#### __suppressConsoleResults__
 
 Default is `false`. If true, the performance results won't be printed to the terminal log.
 
-### recentDays
+#### __recentDays__
 
 Default is `0` feature is off. For any value greater than zero, only the result from the recent designated days would be analyzed. This value can be integer or decimal (e.g. 1 for recent 1 day, 0.5 for recent half day etc.). Please note that the option _disableAppendToExistingFile_ must be set to `false` (default value) in order to use this option.
 
@@ -139,10 +139,14 @@ Default is `0` feature is off. For any value greater than zero, only the result 
 
 A new directory named `performance-results` (or a different specified name) is created inside your project's root folder. Once all the tests are completed, two files are created inside the performance-results directory: `performance-results.json` and `performance-results.csv`. The analyzed data includes average time, standard error of mean (SEM), number of samples, minimum value, maximum value, earliest time, and latest time. The results table is also printed to the terminal log.
 
+### Analyzing performance data in bulk
+
+To analyze existing performance data in bulk without generating new tests, it is recommended to use the [__performancetotal-cli__ tool](https://www.npmjs.com/package/performancetotal-cli).
+
 ## Typescript support
 
 Typescript is supported for this plugin.
 
 ## Support
 
-For any questions or suggestions contact me at: [tzur.paldi@outlook.com](mailto:tzur.paldi@outlook.com?subjet=Playwright-cleanup%20Support)
+For any questions or suggestions contact me at: [tzur.paldi@outlook.com](mailto:tzur.paldi@outlook.com?subjcet=Playwright-cleanup%20Support)
