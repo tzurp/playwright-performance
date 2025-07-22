@@ -16,7 +16,15 @@
     "performance"
   ],
   "author": "Tzur Paldi",
-  "license": "ISC",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tzurp/playwright-performance.git"
+  },
+  "homepage": "https://github.com/tzurp/playwright-performance#readme",
+  "bugs": {
+    "url": "https://github.com/tzurp/playwright-performance/issues"
+  },
   "devDependencies": {
     "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.6",
