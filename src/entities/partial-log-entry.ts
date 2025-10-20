@@ -6,6 +6,8 @@ export class PartialLogEntry {
     displayTime: string;
     instanceId: string;
     brName: string;
+    memoryUsage: number;
+    cpuUsage: number;
 
     constructor() {
         this.name = "";
@@ -15,6 +17,8 @@ export class PartialLogEntry {
         this.displayTime = "";
         this.instanceId = "";
         this.brName = "";
+        this.memoryUsage = 0;
+        this.cpuUsage = 0;
     }
 }
 

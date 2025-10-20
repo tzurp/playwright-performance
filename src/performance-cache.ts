@@ -54,8 +54,40 @@ export class PerformanceCache {
         logEntry.type = StepType.Start;
         logEntry.time = new Date().getTime();
         logEntry.displayTime = new Date().toLocaleString();
+        logEntry.memoryUsage = this.getMemoryUsage();
+        logEntry.cpuUsage = this.getCpuUsage();
 
         return logEntry;
+    }
+
+    private getMemoryUsage(): number {
+        try {
+            // Access process through globalThis to avoid TypeScript errors
+            const proc = (globalThis as any).process;
+            if (proc && proc.memoryUsage) {
+                const memUsage = proc.memoryUsage();
+                // Return heap used in bytes
+                return memUsage.heapUsed;
+            }
+        } catch (e) {
+            // If process is not available, return 0
+        }
+        return 0;
+    }
+
+    private getCpuUsage(): number {
+        try {
+            // Access process through globalThis to avoid TypeScript errors
+            const proc = (globalThis as any).process;
+            if (proc && proc.cpuUsage) {
+                const cpuUsage = proc.cpuUsage();
+                // Return total CPU time in microseconds (user + system)
+                return cpuUsage.user + cpuUsage.system;
+            }
+        } catch (e) {
+            // If process is not available, return 0
+        }
+        return 0;
     }
 
     private getPerformanceEntryTime(stepName: string): number {
@@ -92,6 +124,12 @@ export class PerformanceCache {
                 tempPerformanceEntry.endTime = correspondedEndEntry.time;
                 tempPerformanceEntry.duration = tempPerformanceEntry.getDuration();
                 tempPerformanceEntry.isTestPassed = isTestPassed;
+                tempPerformanceEntry.startMemoryUsage = startEntry.memoryUsage;
+                tempPerformanceEntry.endMemoryUsage = correspondedEndEntry.memoryUsage;
+                tempPerformanceEntry.memoryDifference = tempPerformanceEntry.getMemoryDifference();
+                tempPerformanceEntry.startCpuUsage = startEntry.cpuUsage;
+                tempPerformanceEntry.endCpuUsage = correspondedEndEntry.cpuUsage;
+                tempPerformanceEntry.cpuDifference = tempPerformanceEntry.getCpuDifference();
 
                 this._performanceEntries.push(tempPerformanceEntry);
             }

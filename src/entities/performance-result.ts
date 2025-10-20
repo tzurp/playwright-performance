@@ -8,6 +8,12 @@ export class PerformanceResult {
     maxValue: number;
     earliestTime: string;
     latestTime: string;
+    avgMemory: number;
+    minMemory: number;
+    maxMemory: number;
+    avgCpu: number;
+    minCpu: number;
+    maxCpu: number;
 
     constructor() {
         this.name = "";
@@ -19,5 +25,11 @@ export class PerformanceResult {
         this.maxValue = 0;
         this.earliestTime = "";
         this.latestTime = "";
+        this.avgMemory = 0;
+        this.minMemory = 0;
+        this.maxMemory = 0;
+        this.avgCpu = 0;
+        this.minCpu = 0;
+        this.maxCpu = 0;
     }
 }
