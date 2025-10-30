@@ -82,6 +82,6 @@ export class PerformanceMain {
     async analyzeResults(workerIndex: number): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
 
-        await analyzer.analyze({performanceResultsFileName: this._options.performanceResultsFileName, dropResultsFromFailedTest: this._options.dropResultsFromFailedTest, analyzeByBrowser: this._options.analyzeByBrowser, suppressConsoleResults: this._options.suppressConsoleResults, recentDays: this._options.recentDays}, workerIndex);
+        await analyzer.analyze(this._options, workerIndex);
     }
 }

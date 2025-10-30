@@ -6,6 +6,7 @@ export interface Options {
     performanceResultsFileName?: string;
     suppressConsoleResults?: boolean;
     recentDays?: number;
+    generateHtmlChart?: boolean;
 }
 
 const defaultOptions: Options = {
@@ -15,7 +16,8 @@ const defaultOptions: Options = {
     performanceResultsDirectoryName: "performance-results",
     performanceResultsFileName: "performance-results",
     suppressConsoleResults: false,
-    recentDays: 0
+    recentDays: 0,
+    generateHtmlChart: false
 };
 
 let currentOptions: Options = { ...defaultOptions };

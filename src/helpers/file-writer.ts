@@ -20,7 +20,7 @@ export class FileWriter {
     return FileWriter.instance;
   }
 
-  public async readAllLines(path: string): Promise<Array<string>> {
+  public async readFile(path: string): Promise<string> {
     await this.lock;
     let data = "";
 
@@ -35,6 +35,11 @@ export class FileWriter {
     finally {
       await this.unlockFile();
     }
+    return data;
+  }
+
+  public async readAllLines(path: string): Promise<Array<string>> {
+    const data = await this.readFile(path);
 
     const stringArray = data.split("\n");
 
@@ -76,9 +81,13 @@ export class FileWriter {
     return path.join(resultsDir, fileName)
   }
 
+  getRootPath(...subPathSegments: string[]): string {
+    return path.join(appRoot.path, ...subPathSegments);
+  }
+
   public async createResultsDirIfNotExist(resultsPath?: string): Promise<string> {
     let npath = "";
-    const root = appRoot.path;
+    const root = this.getRootPath();;
     let isNotLegal = true;
 
     if (resultsPath) {
