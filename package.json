@@ -1,6 +1,6 @@
 {
   "name": "playwright-performance",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Playwright plugin for analyzing test flow performance",
   "files": [
     "/build/src",
@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tzurp/playwright-performance.git"
+    "url": "git+https://github.com/tzurp/playwright-performance.git"
   },
   "homepage": "https://github.com/tzurp/playwright-performance#readme",
   "bugs": {

@@ -7,6 +7,8 @@ import ObjectsToCsv from 'objects-to-csv';
 import { variables } from "./constants/variables";
 import { Options } from "./entities/options";
 import Logger from "./helpers/logger";
+import { generatePerformanceChart } from "./helpers/graph-generator";
+import * as path from "path";
 
 export class PerformanceAnalyzer {
     _performanceResults: Array<PerformanceResult>;
@@ -26,7 +28,7 @@ export class PerformanceAnalyzer {
         let performanceLogEntries = await this.deserializeData(logFilePath);
         let groupedResults: PerformanceLogEntry[][];
 
-        if(options.recentDays) {
+        if (options.recentDays) {
             recentDaysMessage = `[Recent days:${options.recentDays}]`;
         }
 
@@ -39,7 +41,7 @@ export class PerformanceAnalyzer {
                 if (options.dropResultsFromFailedTest) {
                     return e.isTestPassed;
                 }
-                
+
                 return true;
             });
             performanceLogEntries = filteredEntries;
@@ -71,13 +73,17 @@ export class PerformanceAnalyzer {
         });
 
         const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
-        
+
         logger.info(`\nPlaywright-performance results${recentDaysMessage}(worker[${workerIndex}]):\n`, false);
 
         logger.info(picked, false, true);
-        
+
         await this.serializeData(saveDataFilePath);
         
+        if (options.generateHtmlChart) {
+            await generatePerformanceChart(path.join(resultsDir, options.performanceResultsFileName + '.json'), path.join(resultsDir, "performance-chart.html"));
+        }
+
         logger.info(`\nPlaywright-performance results saved to: ${saveDataFilePath}.csv/json\n`, true);
     }
 
