@@ -139,6 +139,8 @@ Default is `0` feature is off. For any value greater than zero, only the result 
 #### __generateHtmlChart__
 
 Default is `false`. If true, a `performance-chart.html` file is created inside the performance-results directory. If the `analyzeByBrowser` option is turned on, the bars in the chart are colored according to the browser type. The bars are sorted from the highest to the lowest value.
+>The generated HTML report uses [Chart.js](https://www.chartjs.org/) and [chartjs-plugin-datalabels](https://chartjs-plugin-datalabels.netlify.app/) via CDN links.  
+>⚠️ **Internet access is required** to load these libraries. If you open the report offline, the chart will not render.
 
 ## Getting the results
 
