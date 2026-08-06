@@ -25,35 +25,51 @@ npm install playwright-performance --save-dev
 
 ## Usage
 
-Import playwright-performance in your test file as follows:
+To use playwright-performance, extend your Playwright test object with the performance fixture. The setup differs slightly between TypeScript and JavaScript.
 
-```typescript
-import extendPlaywrightPerformance, {PerformanceOptions, PerformanceWorker, PlaywrightPerformance} from "playwright-performance"; 
+### TypeScript
+
+Import the fixture as the default export and bring the related types in with `import type`:
+
+```ts
+import base from '@playwright/test';
+import extendPlaywrightPerformance from 'playwright-performance';
+import type { PlaywrightPerformance, PerformanceOptions, PerformanceWorker } from 'playwright-performance';
+
+const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(
+  extendPlaywrightPerformance()
+);
+```
+
+### JavaScript
+
+For JavaScript, only the fixture import is required:
+
+```js
+import base from '@playwright/test';
+import extendPlaywrightPerformance from 'playwright-performance';
+
+const test = base.extend(extendPlaywrightPerformance());
 ```
 
 ### Usage in test
 
-To use playwright-performance, simply import the playwright-performance object and types, and then extend your test object using test.extend<>(). This will include the performance functionality in your test. No further setup is required. Here's an example:
+Once the test object is extended, the performance fixture is available in your tests without any extra setup:
 
-```typescript
-import { test as base, expect } from '@playwright/test';
-import extendPlaywrightPerformance, {PerformanceOptions, PerformanceWorker, PlaywrightPerformance} from "playwright-performance"; 
-
-const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance());
-
+```ts
 test('startup performance', async ({ page, performance }) => {
-    performance.sampleStart("GH-startup");
-    await page.goto('http://github.com/');
-    performance.sampleEnd("GH-startup");
+  performance.sampleStart('GH-startup');
+  await page.goto('https://github.com/');
+  performance.sampleEnd('GH-startup');
 
-    performance.sampleStart("SF-startup");
-    await page.goto('https://sourceforge.net/');
-    performance.sampleEnd("SF-startup");
-  });
+  performance.sampleStart('SF-startup');
+  await page.goto('https://sourceforge.net/');
+  performance.sampleEnd('SF-startup');
+});
 ```
 
 >❗
->It is advisable to define the extended `test` object in a separate, reusable `test-base` file
+>It is recommended to place the extended `test` object in a shared setup or fixtures module so all test files can reuse the same configuration.
 >👍
 
 You can also get the time span for a single sample inside a test:
