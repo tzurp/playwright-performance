@@ -11,7 +11,8 @@ const options: PerformanceOptions = {
   performanceResultsFileName: "performance-results",      // Optional: Default is "performance-results"
   suppressConsoleResults: false,       // Optional: Default is false
   recentDays: 0,                       // Optional: Default is 0
-  generateHtmlChart: false              // Optional: Default is false
+  generateHtmlChart: false,
+  enabled: true              // Optional: Default is false
 };
 
 const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance(options));
