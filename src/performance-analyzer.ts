@@ -79,7 +79,7 @@ export class PerformanceAnalyzer {
         logger.info(picked, false, true);
 
         await this.serializeData(saveDataFilePath);
-        
+
         if (options.generateHtmlChart) {
             await generatePerformanceChart(path.join(resultsDir, options.performanceResultsFileName + '.json'), path.join(resultsDir, "performance-chart.html"));
         }
@@ -106,12 +106,15 @@ export class PerformanceAnalyzer {
         const textResultsArray = await fileWriter.readAllLines(fileName);
 
         textResultsArray.forEach(textResult => {
-            if (textResult != "") {
-                const performanceResult = JSON.parse(textResult) as PerformanceLogEntry;
-
-                if (performanceResult.id !== undefined) {
-                    resultsArray.push(performanceResult);
-                }
+            if (textResult === "") return;
+            let performanceResult;
+            try {
+                performanceResult = JSON.parse(textResult);
+            } catch {
+                return; // skip corrupted / partial lines
+            }
+            if (performanceResult.id !== undefined) {
+                resultsArray.push(performanceResult);
             }
         });
 

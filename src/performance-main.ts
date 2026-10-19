@@ -30,14 +30,26 @@ export class PerformanceMain {
     }
 
     sampleStart(stepName: string): void {
+        if (!this._options.enabled) {
+            return;
+        }
+
         this.performanceCache.sampleStart(stepName, this._instanceid);
     }
 
     sampleEnd(stepName: string): void {
+        if (!this._options.enabled) {
+            return;
+        }
+
         this.performanceCache.sampleEnd(stepName, this._instanceid);
     }
 
     getSampleTime(stepName: string): number {
+        if (!this._options.enabled) {
+            return 0;
+        }
+
         return this.performanceCache.getSampleTime(stepName);
     }
 
@@ -45,6 +57,10 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async initialize(): Promise<void> {
+        if (!this._options.enabled) {
+            return;
+        }
+
         let resultsDir = "";
         const fileWriter = FileWriter.getInstance();
 
@@ -73,6 +89,10 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async finalizeTest(browser: any, workerInfo: TestInfo): Promise<void> {
+        if (!this._options.enabled) {
+            return;
+        }
+
         await this.performanceCache.flush(FileWriter.getInstance().getFilePath((global as any)._playwrightPerformanceResultsDir, variables.logFileName), browser, workerInfo.status == 'passed');
     }
 
@@ -80,6 +100,10 @@ export class PerformanceMain {
      * @deprecated Don't use this method directly.
      */
     async analyzeResults(workerIndex: number): Promise<void> {
+        if (!this._options.enabled) {
+            return;
+        }
+
         const analyzer = new PerformanceAnalyzer();
 
         await analyzer.analyze(this._options, workerIndex);
