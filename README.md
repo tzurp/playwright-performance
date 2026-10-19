@@ -27,6 +27,18 @@ npm install playwright-performance --save-dev
 
 To use playwright-performance, extend your Playwright test object with the performance fixture. The setup differs slightly between TypeScript and JavaScript.
 
+### Playwright workers
+
+The performance log is shared by all workers. Until concurrent writes to that log are coordinated, run Playwright with a single worker to avoid log corruption or lost results:
+
+```ts
+export default defineConfig({
+  workers: 1
+});
+```
+
+Set `workers: 1` in your `playwright.config.ts` (or pass `--workers=1` to the Playwright test command). This applies to a single test run; avoid running multiple Playwright processes at the same time if they share the same performance results directory.
+
 ### TypeScript
 
 Import the fixture as the default export and bring the related types in with `import type`:
@@ -91,6 +103,7 @@ You can override the default options values in the `performanceOptions` fixture 
 ```typescript
 const options: PerformanceOptions = {
   // Specify only the options you need. Unspecified options will use default values.
+  enabled: true,                       // Optional: Default is true
   disableAppendToExistingFile: false,  // Optional: Default is false
   dropResultsFromFailedTest: false,    // Optional: Default is false
   analyzeByBrowser: false,             // Optional: Default is false
@@ -102,6 +115,16 @@ const options: PerformanceOptions = {
 };
 
 const test = base.extend<PlaywrightPerformance, PerformanceOptions & PerformanceWorker>(extendPlaywrightPerformance(options));
+```
+
+#### __enabled__
+
+Default is `true`. Set to `false` to disable performance collection and analysis. The fixtures remain available, but sampling methods do nothing, no log or result files are written, and `getSampleTime()` returns `0`.
+
+```typescript
+const options: PerformanceOptions = {
+  enabled: false
+};
 ```
 
 #### __disableAppendToExistingFile__

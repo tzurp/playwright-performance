@@ -6,3 +6,5 @@ build/
 performance-results/
 dev-dep/
 .vscode/
+docs/
+

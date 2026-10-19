@@ -1,4 +1,5 @@
 export interface Options {
+    enabled?: boolean;
     disableAppendToExistingFile?: boolean;
     dropResultsFromFailedTest?: boolean;
     analyzeByBrowser?: boolean;
@@ -10,6 +11,7 @@ export interface Options {
 }
 
 const defaultOptions: Options = {
+    enabled: true,
     disableAppendToExistingFile: false,
     dropResultsFromFailedTest: false,
     analyzeByBrowser: false,
